@@ -1,4 +1,5 @@
 import "./Grant.css"
+import React from 'react';
 
 function Grant(){
     return(

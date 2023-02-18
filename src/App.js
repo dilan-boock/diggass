@@ -1,4 +1,5 @@
 import './App.css';
+import React from 'react';
 import Profile from './profile';
 import Tabe from './tabe';
 
