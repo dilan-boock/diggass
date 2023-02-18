@@ -2,6 +2,7 @@ import './App.css';
 import React from 'react';
 import Profile from './profile';
 import Tabe from './tabe';
+import Mascot from './Mascot';
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
           <Tabe/>
         </div>
       </div>
+      <Mascot />
     </div>
   );
 }
