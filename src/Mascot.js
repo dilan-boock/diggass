@@ -1,58 +1,70 @@
 import React from 'react';
-import { useState, useEffect } from "react";
 import './Mascot.css';
 
-function Mascot(){
-    const [isActive, setIsActive] = useState(false);
-    const handleClick = () => {setIsActive(current => !current); };
-
-    const [setIsLoaded] = useState(false);
-    var [state, setState] = useState();
-    
-    //var [state, setState] = useState(" ");
-    useEffect(() => {
-        // Update the document title using the browser API
-        document.title = `DIGGAS`;
-        fetch(" ")
-        .then(res => res.json())
-        .then(
-            (result) => {
-            setIsLoaded(true);
-            setState(result);
-            }
-        )
-      });
-    
-      function ButtonClick() {
-        var text = document.getElementById('text').value;
-        setState(state = text);
-      } 
-    /*function handleChange(event) {
-        this.setState({value: event.target.value});
+class Mascot extends React.Component{
+    constructor() {
+        super()
+        this.state = {
+            name: ''
+        }
+    }
+    handleChange = (event) => {
+        this.setState({[event.target.name]: event.target.value});
       }
-    
-    function  handleSubmit(event) {
-        alert('Отправленное имя: ' + this.state.value);
+     
+      handleSubmit = (event) => {
+        alert('A form was submitted: ' + this.state);
+     
+        fetch('http://localhost:3000/store-data', {
+            method: 'POST',
+            // We convert the React state to JSON and send it as the POST body
+            body: JSON.stringify(this.state)
+          }).then(function(response) {
+            console.log(response)
+            return response.json();
+          });
+     
         event.preventDefault();
-      }*/
-
-    return(
-        <div className='mas'>
-            <div className='mascot' style={{display: isActive ? 'block' : 'none' }} onClick={handleClick}></div>
-            <div className='chat' style={{display: isActive ? 'none' : 'block' }}>
-                <div className='okno'>
-                    <form>
-                        <p className='out' placeholder='Поле вывода'>Ваше сообщение: {state}</p>
-                        <div className='chat_form'>
-                            <input id='text' className='text_in' placeholder='Поле ввода' type="text"></input>
-                            <button className='but_chat' onClick={(ButtonClick)}></button>
-                        </div>
-                    </form>
+    }
+    render() {
+        return(
+            <div className='mas'>
+                <div className='mascot'></div>
+                <div className='chat'>
+                    <div className='okno'>
+                        <form onSubmit={this.handleSubmit}>
+                            <Out messages={this.state.messages}></Out>
+                            <div className='chat_form'>
+                                <input id='text' className='text_in' placeholder='Поле ввода' type="text" value={this.state.value} name="name" onChange={this.handleChange}></input>
+                                <button className='but_chat' value="Submit"></button>
+                            </div>
+                        </form>
+                    </div>
+                    <button className='clear'>X</button>
                 </div>
-                <button className='clear' onClick={handleClick}>X</button>
             </div>
-        </div>
-    );
+        );
+    }
+}
+class Out extends React.Component {
+    render() {
+        return (
+            <ul className="message-list">
+                {this.props.messages.map(message => {
+                    return (
+                        <li key={message.id}>
+                            <div className='id_mess'>
+                                {message.senderId}
+                            </div>
+                            <div className='text_mess'>
+                                {message.text}
+                            </div>
+                        </li>
+                    )
+                })}
+            </ul>
+        )
+    }
 }
 
 export default Mascot;
